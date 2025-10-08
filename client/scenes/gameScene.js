@@ -41,8 +41,6 @@ export default class GameScene extends Scene {
       this.channel.emit('addDummy')
     })
 
-    this.add.text(0,0, 'HP: ',  { fontSize: 48 })
-
     const parseUpdates = updates => {
       if (typeof updates === undefined || updates === '') return []
 
@@ -67,7 +65,7 @@ export default class GameScene extends Scene {
 
     const updatesHandler = updates => {
       updates.forEach(gameObject => {
-        const { playerId, x, y, dead } =      n          
+        const { playerId, x, y, dead } = gameObject
         const alpha = dead ? 0 : 1
 
         if (Object.keys(this.objects).includes(playerId)) {

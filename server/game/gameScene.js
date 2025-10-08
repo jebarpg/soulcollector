@@ -24,7 +24,9 @@ export class GameScene extends Scene {
   }
 
   prepareToSync(player) {
-    return `${player.playerId},${Math.round(player.x).toString(36)},${Math.round(player.y).toString(36)},${player.dead === true ? 1 : 0},`
+    return `${player.playerId},${Math.round(player.x).toString(36)},${Math.round(player.y).toString(36)},${
+      player.dead === true ? 1 : 0
+    },`
   }
 
   getState() {
@@ -78,8 +80,6 @@ export class GameScene extends Scene {
         })
       })
 
-      // Use a group to keep track of alive and dead players. If one player dies then it's spot
-      // gets freed up and used for the next created player that joins.
       channel.on('addPlayer', data => {
         let dead = this.playersGroup.getFirstDead()
         if (dead) {

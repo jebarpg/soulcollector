@@ -37,8 +37,8 @@ export default class Controls {
     let left = new Control(scene, 0, 0, 'left').setRotation(-0.5 * Math.PI)
     let right = new Control(scene, 0, 0, 'right').setRotation(0.5 * Math.PI)
     let up = new Control(scene, 0, 0, 'up')
-    let down = new Control(scene, 580, 400, 'down').setRotation(1 * Math.PI)
-    this.controls.push(left, right, up)
+    let down = new Control(scene, 0, 0, 'down').setRotation(1 * Math.PI)
+    this.controls.push(left, right, up, down)
     this.resize()
 
     this.scene.events.on('update', this.update, this)
@@ -60,7 +60,8 @@ export default class Controls {
         y: h
       },
       { x: controlsRadius + 214, y: h },
-      { x: w, y: h }
+      { x: w, y: h },
+      { x: w - 204, y: h }
     ]
 
     this.controls.forEach((ctl, i) => {
