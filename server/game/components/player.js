@@ -1,5 +1,5 @@
 export class Player extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene, playerId, x = 200, y = 200, dummy = false) {
+  constructor(scene, playerId, x = 200, y = 200, dummy = false, health = 100, score = 0) {
     super(scene, x, y, '')
     scene.add.existing(this)
     scene.physics.add.existing(this)
@@ -14,6 +14,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.playerId = playerId
     this.move = {}
+
+    this.health = health
+    this.score = score
 
     this.setDummy(dummy)
 

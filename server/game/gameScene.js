@@ -24,9 +24,8 @@ export class GameScene extends Scene {
   }
 
   prepareToSync(player) {
-    return `${player.playerId},${Math.round(player.x).toString(36)},${Math.round(player.y).toString(36)},${
-      player.dead === true ? 1 : 0
-    },`
+    return `${player.playerId},${Math.round(player.x).toString(36)},${Math.round(player.y).toString(36)},
+    ${player.dead === true ? 1 : 0},${Math.round(player.health).toString(36)},${Math.round(player.score).toString(36)},`
   }
 
   getState() {
