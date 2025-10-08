@@ -1,5 +1,5 @@
 export class Player extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene, playerId, x = 200, y = 200, dummy = false, health = 100, score = 0) {
+  constructor(scene, playerId, x = 200, y = 200, dummy = false, health = 100, score = 0, direction = 4) {
     super(scene, x, y, '')
     scene.add.existing(this)
     scene.physics.add.existing(this)
@@ -17,6 +17,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.health = health
     this.score = score
+    this.direction = direction
 
     this.setDummy(dummy)
 
@@ -65,6 +66,23 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       down: int === 8 || int === 10 || int === 9,
       none: int === 16
     }
+
+    switch(int){
+      case 1:
+        this.direction = 1
+        break;
+      case 2:
+        this.direction = 2
+        break;
+      case 4:
+        this.direction = 4
+        break;
+      case 8:
+        this.direction = 8
+        break;
+    }
+    console.log("direction:" + this.direction)
+    
 
     this.move = move
   }

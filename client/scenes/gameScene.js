@@ -43,25 +43,28 @@ export default class GameScene extends Scene {
 
     let healthText = this.add.text(0,0, "HP: ", { fontSize: 48 })
     let scoreText = this.add.text(0,48, "Score: ", { fontSize: 48 })
+    let directionText = this.add.text(0,96, "Direction: ", { fontSize: 48 })
 
     const parseUpdates = updates => {
       if (typeof updates === undefined || updates === '') return []
 
       // parse
       let u = updates.split(',')
-      u.pop()
-
+      console.log("u:" + u)
+      //u.pop()
+      console.log("u:" + u)
       let u2 = []
 
       u.forEach((el, i) => {
-        if (i % 6 === 0) {
+        if (i % 7 === 0) {
           u2.push({
             playerId: u[i + 0],
             x: parseInt(u[i + 1], 36),
             y: parseInt(u[i + 2], 36),
             dead: parseInt(u[i + 3]) === 1 ? true : false,
             health: parseInt(u[i + 4], 36),
-            score: parseInt(u[i + 5], 36)
+            score: parseInt(u[i + 5], 36),
+            direction: parseInt(u[i + 6], 36)
           })
         }
       })
@@ -70,7 +73,8 @@ export default class GameScene extends Scene {
 
     const updatesHandler = updates => {
       updates.forEach(gameObject => {
-        const { playerId, x, y, dead, health, score } = gameObject
+        console.log(gameObject)
+        const { playerId, x, y, dead, health, score, direction } = gameObject
         const alpha = dead ? 0 : 1
 
         if (Object.keys(this.objects).includes(playerId)) {
@@ -82,6 +86,7 @@ export default class GameScene extends Scene {
           if (this.playerId == playerId){
             healthText.setText("HP: " + health)
             scoreText.setText("Score: " + score)
+            directionText.setText("Direction: " + direction)
           }
         } else {
           // if the gameObject does NOT exist,
