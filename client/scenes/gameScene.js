@@ -50,9 +50,9 @@ export default class GameScene extends Scene {
 
       // parse
       let u = updates.split(',')
-      console.log("u:" + u)
-      //u.pop()
-      console.log("u:" + u)
+      //console.log("u:" + u)
+      u.pop()
+      //console.log("u:" + u)
       let u2 = []
 
       u.forEach((el, i) => {
@@ -73,7 +73,7 @@ export default class GameScene extends Scene {
 
     const updatesHandler = updates => {
       updates.forEach(gameObject => {
-        console.log(gameObject)
+        //console.log(gameObject)
         const { playerId, x, y, dead, health, score, direction } = gameObject
         const alpha = dead ? 0 : 1
 
@@ -97,6 +97,7 @@ export default class GameScene extends Scene {
           }
           newGameObject.sprite.setAlpha(alpha)
           this.objects = { ...this.objects, [playerId]: newGameObject }
+          console.log("new object: x y: playerId" + x + " " + y + " " + playerId)
         }
       })
     }

@@ -24,7 +24,7 @@ export class GameScene extends Scene {
   }
 
   prepareToSync(player) {
-    return `${player.playerId},${Math.round(player.x).toString(36)},${Math.round(player.y).toString(36)},${player.dead === true ? 1 : 0},${Math.round(player.health).toString(36)},${Math.round(player.score).toString(36)},${Math.round(player.direction).toString(36)}`
+    return `${player.playerId},${Math.round(player.x).toString(36)},${Math.round(player.y).toString(36)},${player.dead === true ? 1 : 0},${Math.round(player.health).toString(36)},${Math.round(player.score).toString(36)},${Math.round(player.direction).toString(36)},`
   }
 
   getState() {
@@ -84,6 +84,7 @@ export class GameScene extends Scene {
           dead.revive(channel.playerId, false)
         } else {
           this.playersGroup.add(new Player(this, channel.playerId, Phaser.Math.RND.integerInRange(100, 700)))
+          //console.log("addPlayer total: " + this.playersGroup.countActive())
         }
       })
 

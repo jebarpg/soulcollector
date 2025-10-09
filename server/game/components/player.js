@@ -45,6 +45,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   kill() {
     this.dead = true
     this.setActive(false)
+    this.alpha(0)
   }
 
   revive(playerId, dummy) {
@@ -58,7 +59,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   setMove(data) {
     let int = parseInt(data, 36)
 
-    console.log(int)
+    //console.log(int)
     let move = {
       left: int === 1 || int === 5 || int == 9,
       right: int === 2 || int === 6 || int == 10,
@@ -81,7 +82,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.direction = 8
         break;
     }
-    console.log("direction:" + this.direction)
+    //console.log("direction:" + this.direction)
     
 
     this.move = move
