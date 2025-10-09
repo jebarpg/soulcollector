@@ -97,7 +97,7 @@ export default class GameScene extends Scene {
           }
           newGameObject.sprite.setAlpha(alpha)
           this.objects = { ...this.objects, [playerId]: newGameObject }
-          console.log("new object: x y: playerId" + x + " " + y + " " + playerId)
+          //console.log("new object: x y: playerId" + x + " " + y + " " + playerId)
         }
       })
     }
