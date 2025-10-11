@@ -1,5 +1,5 @@
 export class Player extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene, playerId, x = 200, y = 200, dummy = false, health = 100, score = 0, direction = 4) {
+  constructor(scene, playerId, x = 200, y = 200, dummy = false, health = 100, score = 0, direction = 4, orbs = 0) {
     super(scene, x, y, '')
     scene.add.existing(this)
     scene.physics.add.existing(this)
@@ -14,10 +14,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.playerId = playerId
     this.move = {}
+    this.attack = {}
 
     this.health = health
     this.score = score
     this.direction = direction
+    this.orbs = orbs
 
     this.setDummy(dummy)
 
@@ -69,15 +71,19 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     switch(int){
       case 1:
+        // left
         this.direction = 1
         break;
       case 2:
+        // right
         this.direction = 2
         break;
       case 4:
+        // up
         this.direction = 4
         break;
       case 8:
+        // down
         this.direction = 8
         break;
     }
@@ -85,6 +91,18 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     
 
     this.move = move
+  }
+
+  setAttack(data) {
+    let int = parseInt(data, 36)
+
+    let attack = {
+      sword: int === 1,
+      fireball: int === 2,
+      none: int === 4
+    }
+
+    this.attack = attack
   }
 
   update() {
@@ -95,6 +113,16 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.move.up) this.setVelocityY(-160)
     else if (this.move.down) this.setVelocityY(160)
     else this.setVelocityY(0)
+
+    if (this.attack.sword) {
+      //this.setVelocityX(160)
+    }
+    else if (this.attack.fireball) {
+      //this.setVelocityX(-160)
+    }
+    else {
+      //this.setVelocityX(0)
+    }
   }
 
   postUpdate() {

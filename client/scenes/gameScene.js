@@ -32,18 +32,45 @@ export default class GameScene extends Scene {
     new Cursors(this, this.channel)
     new Controls(this, this.channel)
 
+    // Disable the browser's context menu for right-click
+    this.input.mouse.disableContextMenu();
+
+    // Listen for pointerdown events
+    this.input.on('pointerdown', function (pointer) {
+      let attack = {
+        sword: false,
+        fireball: false,
+        none: true
+      }
+      if (pointer.leftButtonDown()) {
+        attack.sword = true
+        attack.none = false
+      } else if (pointer.rightButtonDown()) {
+        attack.fireball = true
+        attack.none = false
+      }
+      if (attack.sword || attack.fireball || attack.none !== this.prevNoAttack) {
+        let total = 0
+        if (attack.sword) total += 1
+        if (attack.fireball) total += 2
+        let str36 = total.toString(36)
+        this.channel.emit('playerAttack', str36)
+      }
+    }, this); // 'this' ensures the callback context is the scene
+
     FullscreenButton(this)
 
-    let addDummyDude = this.add
-      .text(this.cameras.main.width / 2, this.cameras.main.height / 2 - 100, 'CLICK ME', { fontSize: 48 })
-      .setOrigin(0.5)
-    addDummyDude.setInteractive().on('pointerdown', () => {
-      this.channel.emit('addDummy')
-    })
+    // let addDummyDude = this.add
+    //   .text(this.cameras.main.width / 2, this.cameras.main.height / 2 - 100, 'CLICK ME', { fontSize: 48 })
+    //   .setOrigin(0.5)
+    // addDummyDude.setInteractive().on('pointerdown', () => {
+    //   this.channel.emit('addDummy')
+    // })
 
     let healthText = this.add.text(0,0, "HP: ", { fontSize: 48 })
     let scoreText = this.add.text(0,48, "Score: ", { fontSize: 48 })
-    let directionText = this.add.text(0,96, "Direction: ", { fontSize: 48 })
+    let orbText = this.add.text(0,96, "Orbs: ", { fontSize: 48 })
+    let directionText = this.add.text(0,144, "Direction: ", { fontSize: 48 })
 
     const parseUpdates = updates => {
       if (typeof updates === undefined || updates === '') return []
@@ -56,7 +83,7 @@ export default class GameScene extends Scene {
       let u2 = []
 
       u.forEach((el, i) => {
-        if (i % 7 === 0) {
+        if (i % 8 === 0) {
           u2.push({
             playerId: u[i + 0],
             x: parseInt(u[i + 1], 36),
@@ -64,7 +91,8 @@ export default class GameScene extends Scene {
             dead: parseInt(u[i + 3]) === 1 ? true : false,
             health: parseInt(u[i + 4], 36),
             score: parseInt(u[i + 5], 36),
-            direction: parseInt(u[i + 6], 36)
+            direction: parseInt(u[i + 6], 36),
+            orbs: parseInt(u[i + 7], 36)
           })
         }
       })
@@ -74,7 +102,7 @@ export default class GameScene extends Scene {
     const updatesHandler = updates => {
       updates.forEach(gameObject => {
         //console.log(gameObject)
-        const { playerId, x, y, dead, health, score, direction } = gameObject
+        const { playerId, x, y, dead, health, score, direction, orbs } = gameObject
         const alpha = dead ? 0 : 1
 
         if (Object.keys(this.objects).includes(playerId)) {
@@ -87,6 +115,7 @@ export default class GameScene extends Scene {
             healthText.setText("HP: " + health)
             scoreText.setText("Score: " + score)
             directionText.setText("Direction: " + direction)
+            orbText.setText("Orbs: " + orbs)
           }
         } else {
           // if the gameObject does NOT exist,

@@ -24,7 +24,7 @@ export class GameScene extends Scene {
   }
 
   prepareToSync(player) {
-    return `${player.playerId},${Math.round(player.x).toString(36)},${Math.round(player.y).toString(36)},${player.dead === true ? 1 : 0},${Math.round(player.health).toString(36)},${Math.round(player.score).toString(36)},${Math.round(player.direction).toString(36)},`
+    return `${player.playerId},${Math.round(player.x).toString(36)},${Math.round(player.y).toString(36)},${player.dead === true ? 1 : 0},${Math.round(player.health).toString(36)},${Math.round(player.score).toString(36)},${Math.round(player.direction).toString(36)},${Math.round(player.orbs).toString(36)},`
   }
 
   getState() {
@@ -37,6 +37,7 @@ export class GameScene extends Scene {
 
   create() {
     this.playersGroup = this.add.group()
+    this.enemiesGroup = this.add.group()
 
     const addDummy = () => {
       let x = Phaser.Math.RND.integerInRange(50, 800)
@@ -74,6 +75,14 @@ export class GameScene extends Scene {
         this.playersGroup.children.iterate(player => {
           if (player.playerId === channel.playerId) {
             player.setMove(data)
+          }
+        })
+      })
+
+      channel.on('playerAttack', data => {
+        this.playersGroup.children.iterate(player => {
+          if (player.playerId === channel.playerId) {
+            player.setAttack(data)
           }
         })
       })

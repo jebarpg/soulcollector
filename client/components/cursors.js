@@ -3,6 +3,13 @@ export default class Cursors {
     this.channel = channel
     this.cursors = scene.input.keyboard.createCursorKeys()
 
+    this.keys = scene.input.keyboard.addKeys({
+            w: Phaser.Input.Keyboard.KeyCodes.W,
+            a: Phaser.Input.Keyboard.KeyCodes.A,
+            s: Phaser.Input.Keyboard.KeyCodes.S,
+            d: Phaser.Input.Keyboard.KeyCodes.D
+        });
+
     scene.events.on('update', this.update, this)
   }
 
@@ -14,18 +21,18 @@ export default class Cursors {
       down: false,
       none: true
     }
-    if (this.cursors.left.isDown) {
+    if (this.cursors.left.isDown || this.keys.a.isDown) {
       move.left = true
       move.none = false
-    } else if (this.cursors.right.isDown) {
+    } else if (this.cursors.right.isDown || this.keys.d.isDown) {
       move.right = true
       move.none = false
     }
 
-    if (this.cursors.up.isDown) {
+    if (this.cursors.up.isDown || this.keys.w.isDown) {
       move.up = true
       move.none = false
-    } else if (this.cursors.down.isDown) {
+    } else if (this.cursors.down.isDown || this.keys.s.isDown) {
       move.down = true
       move.none = false
     }
