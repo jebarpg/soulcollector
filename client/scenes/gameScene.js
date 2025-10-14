@@ -1,9 +1,11 @@
 import { Scene } from 'phaser'
 import axios from 'axios'
 import Player from '../components/player.js'
+import Enemy from '../components/enemy.js'
 import Cursors from '../components/cursors.js'
 import Controls from '../components/controls.js'
 import FullscreenButton from '../components/fullscreenButton.js'
+
 
 export default class GameScene extends Scene {
   constructor() {
@@ -99,6 +101,30 @@ export default class GameScene extends Scene {
       return u2
     }
 
+    const parseUpdatesEnemy = updates => {
+      if (typeof updates === undefined || updates === '') return []
+
+      // parse
+      let u = updates.split(',')
+      //console.log("u:" + u)
+      u.pop()
+      //console.log("u:" + u)
+      let u2 = []
+
+      u.forEach((el, i) => {
+        if (i % 5 === 0) {
+          u2.push({
+            enemyId: u[i + 0],
+            x: parseInt(u[i + 1], 36),
+            y: parseInt(u[i + 2], 36),
+            dead: parseInt(u[i + 3]) === 1 ? true : false,
+            health: parseInt(u[i + 4], 36)
+          })
+        }
+      })
+      return u2
+    }
+
     const updatesHandler = updates => {
       updates.forEach(gameObject => {
         //console.log(gameObject)
@@ -125,7 +151,40 @@ export default class GameScene extends Scene {
             playerId: playerId
           }
           newGameObject.sprite.setAlpha(alpha)
+          if (this.playerId == playerId){
+            healthText.setText("HP: " + health)
+            scoreText.setText("Score: " + score)
+            directionText.setText("Direction: " + direction)
+            orbText.setText("Orbs: " + orbs)
+          }
           this.objects = { ...this.objects, [playerId]: newGameObject }
+          //console.log("new object: x y: playerId" + x + " " + y + " " + playerId)
+        }
+      })
+    }
+
+    const updatesHandlerEnemy = updates => {
+      updates.forEach(gameObject => {
+        //console.log(gameObject)
+        const { enemyId, x, y, dead, health } = gameObject
+        const alpha = dead ? 0 : 1
+
+        if (Object.keys(this.objects).includes(enemyId)) {
+          // if the gameObject does already exist,
+          // update the gameObject
+          let sprite = this.objects[enemyId].sprite
+          sprite.setAlpha(alpha)
+          sprite.setPosition(x, y)
+          // TODO: show health over enemies as a bar
+        } else {
+          // if the gameObject does NOT exist,
+          // create a new gameObject
+          let newGameObject = {
+            sprite: new Enemy(this, enemyId, x || 200, y || 200),
+            playerId: playerId
+          }
+          newGameObject.sprite.setAlpha(alpha)
+          this.objects = { ...this.objects, [enemyId]: newGameObject }
           //console.log("new object: x y: playerId" + x + " " + y + " " + playerId)
         }
       })
@@ -134,6 +193,11 @@ export default class GameScene extends Scene {
     this.channel.on('updateObjects', updates => {
       let parsedUpdates = parseUpdates(updates[0])
       updatesHandler(parsedUpdates)
+    })
+
+    this.channel.on('updateObjectsEnemy', updates => {
+      let parsedUpdates = parseUpdatesEnemy(updates[0])
+      updatesHandlerEnemy(parsedUpdates)
     })
 
     this.channel.on('removePlayer', playerId => {

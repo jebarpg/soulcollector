@@ -136,5 +136,24 @@ export class GameScene extends Scene {
     if (updates.length > 0) {
       this.io.room().emit('updateObjects', [updates])
     }
+
+    // enemy updates
+    // check to see if any enemy has moved after a delta time
+    let updatesEnemy = ''
+    this.enemiesGroup.children.iterate(enemy => {
+      let x = Math.abs(enemy.x - enemy.prevX) > 0.5
+      let y = Math.abs(enemy.y - enemy.prevY) > 0.5
+      let dead = enemy.dead != enemy.prevDead
+      if (x || y || dead) {
+        if (dead || !enemy.dead) {
+          updatesEnemy += this.prepareToSyncEnemy(enemy)
+        }
+      }
+      enemy.postUpdate()
+    })
+
+    if (updatesEnemy.length > 0) {
+      this.io.room().emit('updateObjectsEnemy', [updatesEnemy])
+    }
   }
 }
