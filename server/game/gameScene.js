@@ -120,6 +120,8 @@ export class GameScene extends Scene {
   }
 
   update() {
+    // player updates
+    // get and update all players that have moved
     let updates = ''
     this.playersGroup.children.iterate(player => {
       let x = Math.abs(player.x - player.prevX) > 0.5
@@ -139,6 +141,29 @@ export class GameScene extends Scene {
 
     // enemy updates
     // check to see if any enemy has moved after a delta time
+    // reset enemy's move timer if they have moved the distance alloted.
+
+    // if enemies are less than 10 then add a new enemy.
+    if (this.enemiesGroup.countActive() < 10) {
+      let deadEnemy = this.enemiesGroup.getFirstDead()
+      if (deadEnemy) {
+          deadEnemy.revive(deadEnemy.enemyId, false)
+        } else {
+          this.enemiesGroup.add(new Enemy(this, this.getIdEnemy(), Phaser.Math.RND.integerInRange(100, 700)))
+          console.log("addEnemy total: " + this.enemiesGroup.countActive())
+        }
+        this.enemiesGroup.children.iterate(enemy => {
+          enemy.setMove("1")
+        })
+    }
+    
+    this.enemiesGroup.children.iterate(enemy => {
+      if (enemy.dead) {
+        enemy.kill()
+      }
+    })
+
+
     let updatesEnemy = ''
     this.enemiesGroup.children.iterate(enemy => {
       let x = Math.abs(enemy.x - enemy.prevX) > 0.5

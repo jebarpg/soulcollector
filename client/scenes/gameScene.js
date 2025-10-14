@@ -11,6 +11,7 @@ export default class GameScene extends Scene {
   constructor() {
     super({ key: 'GameScene' })
     this.objects = {}
+    this.enemies = {}
     this.playerId
   }
 
@@ -25,6 +26,10 @@ export default class GameScene extends Scene {
       frameHeight: 64
     })
     this.load.spritesheet('player', 'assets/player.png', {
+      frameWidth: 32,
+      frameHeight: 48
+    })
+    this.load.spritesheet('enemy', 'assets/enemy.png', {
       frameWidth: 32,
       frameHeight: 48
     })
@@ -169,10 +174,10 @@ export default class GameScene extends Scene {
         const { enemyId, x, y, dead, health } = gameObject
         const alpha = dead ? 0 : 1
 
-        if (Object.keys(this.objects).includes(enemyId)) {
+        if (Object.keys(this.enemies).includes(enemyId)) {
           // if the gameObject does already exist,
           // update the gameObject
-          let sprite = this.objects[enemyId].sprite
+          let sprite = this.enemies[enemyId].sprite
           sprite.setAlpha(alpha)
           sprite.setPosition(x, y)
           // TODO: show health over enemies as a bar
@@ -181,10 +186,10 @@ export default class GameScene extends Scene {
           // create a new gameObject
           let newGameObject = {
             sprite: new Enemy(this, enemyId, x || 200, y || 200),
-            playerId: playerId
+            enemyId: enemyId
           }
           newGameObject.sprite.setAlpha(alpha)
-          this.objects = { ...this.objects, [enemyId]: newGameObject }
+          this.enemies = { ...this.enemies, [enemyId]: newGameObject }
           //console.log("new object: x y: playerId" + x + " " + y + " " + playerId)
         }
       })

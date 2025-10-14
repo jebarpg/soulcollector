@@ -49,7 +49,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
       down: int === 8 || int === 10 || int === 9,
       none: int === 16
     }
-    
+
     this.move = move
   }
 
@@ -61,16 +61,6 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     if (this.move.up) this.setVelocityY(-160)
     else if (this.move.down) this.setVelocityY(160)
     else this.setVelocityY(0)
-
-    if (this.attack.sword) {
-      //this.setVelocityX(160)
-    }
-    else if (this.attack.fireball) {
-      //this.setVelocityX(-160)
-    }
-    else {
-      //this.setVelocityX(0)
-    }
   }
 
   postUpdate() {
