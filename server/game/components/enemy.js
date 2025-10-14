@@ -1,5 +1,5 @@
-export class Player extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene, playerId, x = 200, y = 200, dummy = false, health = 100, score = 0, direction = 4, orbs = 0) {
+export class Enemy extends Phaser.Physics.Arcade.Sprite {
+  constructor(scene, enemyId, x = 200, y = 200, dummy = false, health = 1) {
     super(scene, x, y, '')
     scene.add.existing(this)
     scene.physics.add.existing(this)
@@ -12,16 +12,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.dead = false
     this.prevDead = false
 
-    this.playerId = playerId
+    this.enemyId = enemyId
     this.move = {}
-    this.attack = {}
 
     this.health = health
-    this.score = score
-    this.direction = direction
-    this.orbs = orbs
-
-    this.setDummy(dummy)
 
     this.body.setSize(32, 48)
 
@@ -32,28 +26,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     scene.events.on('update', this.update, this)
   }
 
-  setDummy(dummy) {
-    if (dummy) {
-      this.body.setBounce(1)
-      this.scene.time.addEvent({
-        delay: Phaser.Math.RND.integerInRange(45, 90) * 1000,
-        callback: () => this.kill()
-      })
-    } else {
-      this.body.setBounce(0)
-    }
-  }
-
   kill() {
     this.dead = true
     this.setActive(false)
   }
 
-  revive(playerId, dummy) {
-    this.playerId = playerId
+  revive(enemyId) {
+    this.enemyId = enemyId
     this.dead = false
     this.setActive(true)
-    this.setDummy(dummy)
     this.setVelocity(0)
   }
 
@@ -68,41 +49,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       down: int === 8 || int === 10 || int === 9,
       none: int === 16
     }
-
-    switch(int){
-      case 1:
-        // left
-        this.direction = 1
-        break;
-      case 2:
-        // right
-        this.direction = 2
-        break;
-      case 4:
-        // up
-        this.direction = 4
-        break;
-      case 8:
-        // down
-        this.direction = 8
-        break;
-    }
-    //console.log("direction:" + this.direction)
     
-
     this.move = move
-  }
-
-  setAttack(data) {
-    let int = parseInt(data, 36)
-
-    let attack = {
-      sword: int === 1,
-      fireball: int === 2,
-      none: int === 4
-    }
-    console.log("player " + this.playerId + " " + (int == 1 ? "sword" : int == 2 ? "fireball" : int == 4 ? "none" : ""))
-    this.attack = attack
   }
 
   update() {

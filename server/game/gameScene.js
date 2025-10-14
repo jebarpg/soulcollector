@@ -5,11 +5,13 @@ import pkg from 'phaser'
 const { Scene } = pkg
 
 import { Player } from './components/player.js'
+import { Enemy } from './components/enemy.js'
 
 export class GameScene extends Scene {
   constructor() {
     super({ key: 'GameScene' })
     this.playerId = 0
+    this.enemyId = 0
   }
 
   init() {
@@ -23,14 +25,30 @@ export class GameScene extends Scene {
     return this.playerId++
   }
 
+  getIdEnemy() {
+    return this.enemyId++
+  }
+
   prepareToSync(player) {
     return `${player.playerId},${Math.round(player.x).toString(36)},${Math.round(player.y).toString(36)},${player.dead === true ? 1 : 0},${Math.round(player.health).toString(36)},${Math.round(player.score).toString(36)},${Math.round(player.direction).toString(36)},${Math.round(player.orbs).toString(36)},`
+  }
+
+  prepareToSyncEnemy(enemy) {
+    return `${enemy.enemyId},${Math.round(enemy.x).toString(36)},${Math.round(enemy.y).toString(36)},${enemy.dead === true ? 1 : 0},${Math.round(enemy.health).toString(36)},`
   }
 
   getState() {
     let state = ''
     this.playersGroup.children.iterate(player => {
       state += this.prepareToSync(player)
+    })
+    return state
+  }
+
+  getStateEnemy() {
+    let state = ''
+    this.enemiesGroup.children.iterate(enemy => {
+      state += this.prepareToSyncEnemy(enemy)
     })
     return state
   }
