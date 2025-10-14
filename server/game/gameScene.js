@@ -147,16 +147,29 @@ export class GameScene extends Scene {
     if (this.enemiesGroup.countActive() < 10) {
       let deadEnemy = this.enemiesGroup.getFirstDead()
       if (deadEnemy) {
-          deadEnemy.revive(deadEnemy.enemyId, false)
-        } else {
-          this.enemiesGroup.add(new Enemy(this, this.getIdEnemy(), Phaser.Math.RND.integerInRange(100, 700)))
-          console.log("addEnemy total: " + this.enemiesGroup.countActive())
-        }
-        this.enemiesGroup.children.iterate(enemy => {
-          enemy.setMove("1")
-        })
+        deadEnemy.revive(deadEnemy.enemyId, false)
+      } else {
+        this.enemiesGroup.add(new Enemy(this, this.getIdEnemy(), Phaser.Math.RND.integerInRange(100, 700)))
+        console.log("addEnemy total: " + this.enemiesGroup.countActive())
+      }
+
     }
-    
+    this.enemiesGroup.children.iterate(enemy => {
+      // choose a random direction and move that way
+      let move = Phaser.Math.RND.integerInRange(1, 4)
+      if (move == 1) {
+        enemy.setMove("1")
+      }
+      else if (move == 2) {
+        enemy.setMove("2")
+      }
+      else if (move == 3) {
+        enemy.setMove("4")
+      }
+      else {
+        enemy.setMove("8")
+      }
+    })
     this.enemiesGroup.children.iterate(enemy => {
       if (enemy.dead) {
         enemy.kill()
