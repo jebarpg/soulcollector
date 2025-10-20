@@ -11,9 +11,9 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     this.originX = x
     this.originY = y
-    this.pauseDuration = Phaser.Math.RND.integerInRange(10, 20)
+    this.pauseDuration = Phaser.Math.RND.integerInRange(1000, 2000)
     this.Direction = Phaser.Math.RND.integerInRange(1, 4)
-    this.moveDuration = Phaser.Math.RND.integerInRange(10, 20)
+    this.moveDuration = Phaser.Math.RND.integerInRange(500, 1000)
     this.pauseStartTime = 0
     this.moveStartTime = 0
     this.state = "moving"
