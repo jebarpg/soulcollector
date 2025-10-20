@@ -6,6 +6,8 @@ To clone and run this game, you'll need [Git](https://git-scm.com) and [Node.js]
 
 **Note:** Test it on Chrome. On some browsers like Firefox you need to add a STUN server to make it work.
 
+![running 4 players](https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzN4bnZnMTBxdTQxcnlvbnA2Y3BsZXgydzB1cGhldTBpMG5xbXo1MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Kt9ep4UVQVGpHYhF14/giphy.gif)
+
 ```bash
 # Clone this repository
 $ npx gitget https://github.com/geckosio/phaser3-multiplayer-game-example phaser3-multiplayer-game
