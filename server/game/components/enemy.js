@@ -9,6 +9,15 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.prevX = -1
     this.prevY = -1
 
+    this.originX = x
+    this.originY = y
+    this.pauseDuration = Phaser.Math.RND.integerInRange(10, 20)
+    this.Direction = Phaser.Math.RND.integerInRange(1, 4)
+    this.moveDuration = Phaser.Math.RND.integerInRange(10, 20)
+    this.pauseStartTime = 0
+    this.moveStartTime = 0
+    this.state = "moving"
+
     this.dead = false
     this.prevDead = false
 
@@ -36,6 +45,57 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     this.dead = false
     this.setActive(true)
     this.setVelocity(0)
+  }
+
+  moveDirection() {
+    // if this.moveTime is less than time then move
+    // else pause for random pause time
+    // then choose direction and move towards that direction
+    const now = Date.now();
+
+    // Initialize defaults if not already set
+    if (!this.state) this.state = "moving";
+    if (!this.moveStartTime) this.moveStartTime = now;
+    if (!this.moveDuration) this.moveDuration = Phaser.Math.RND.integerInRange(500, 1000);
+    if (!this.pauseDuration) this.pauseDuration = Phaser.Math.RND.integerInRange(1000, 2000);
+
+    if (this.state === "moving") {
+      // Move in the current direction
+      switch (this.Direction) {
+        case 1:
+          this.setMove("1");
+          break;
+        case 2:
+          this.setMove("2");
+          break;
+        case 3:
+          this.setMove("4");
+          break;
+        case 4:
+          this.setMove("8");
+          break;
+      }
+
+      // If movement duration has passed, start pause phase
+      if (now - this.moveStartTime > this.moveDuration) {
+        this.state = "paused";
+        this.pauseStartTime = now;
+        this.pauseDuration = Phaser.Math.RND.integerInRange(1000, 2000);
+      }
+    }
+
+    else if (this.state === "paused") {
+      // Stay still during pause
+      this.setMove("0"); // or stop velocity if using physics
+
+      // After pause duration, resume moving
+      if (now - this.pauseStartTime > this.pauseDuration) {
+        this.state = "moving";
+        this.moveStartTime = now;
+        this.moveDuration = Phaser.Math.RND.integerInRange(500, 1000);
+        this.Direction = Phaser.Math.RND.integerInRange(1, 4);
+      }
+    }
   }
 
   setMove(data) {

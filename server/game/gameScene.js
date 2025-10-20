@@ -156,19 +156,11 @@ export class GameScene extends Scene {
     }
     this.enemiesGroup.children.iterate(enemy => {
       // choose a random direction and move that way
-      let move = Phaser.Math.RND.integerInRange(1, 4)
-      if (move == 1) {
-        enemy.setMove("1")
+      if (typeof enemy.moveDirection !== 'function') {
+        console.warn('Enemy missing moveDirection():', enemy);
+        return; // skip invalid entries
       }
-      else if (move == 2) {
-        enemy.setMove("2")
-      }
-      else if (move == 3) {
-        enemy.setMove("4")
-      }
-      else {
-        enemy.setMove("8")
-      }
+      enemy.moveDirection()
     })
     this.enemiesGroup.children.iterate(enemy => {
       if (enemy.dead) {
