@@ -10,7 +10,7 @@ To clone and run this game, you'll need [Git](https://git-scm.com) and [Node.js]
 
 ```bash
 # Clone this repository
-$ npx gitget https://github.com/jebarpg/soulcollector.git soulcollector
+$ npx gitget https://github.com/jebarpg/soulcollector soulcollector
 
 # Go into the repository
 $ cd soulcollector
