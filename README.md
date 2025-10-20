@@ -1,4 +1,4 @@
-# Phaser 3 Multiplayer Game Example with geckos.io
+# Soul Collector with geckos.io
 
 ## How To Start
 
@@ -21,6 +21,5 @@ $ npm install
 # Start the local development server (on port 1444)
 $ npm run start
 
-# Add bots to the game (via puppeteer) to test it
-$ npm run test
+go to http://localhost:1444
 ```
